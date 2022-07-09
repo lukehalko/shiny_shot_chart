@@ -1,0 +1,52 @@
+---
+title: "shot chart preprocessing"
+output: html_document
+---
+
+```{r setup}
+library(tidyverse)
+library(reticulate)
+library(knitr)
+library(lubridate)
+shot_data <- read_csv("./data/shot_chart_details.csv")
+```
+
+The dataset has over 2 million entries, so let's clear some of the bloat.
+
+## TODO
+
+I want to filter based on number of shots taken, but I want more recent players to have a lower requirement
+```{r}
+mid <- median(shot_data %>% pull(GAME_DATE))
+
+shots <- shot_data %>% add_count(PLAYER_NAME) %>% filter(n>3500)
+print(shots)
+```
+
+we got it under a million records. I think that's workable for now. Now let's fix the dates on the jawn. How about month/day/year? 
+
+```{r}
+shots <- shots %>% mutate(GAME_DATE = paste(substr(GAME_DATE, 5, 6), substr(GAME_DATE, 7,8), substr(GAME_DATE, 1,4), sep="-"))
+print(shots %>% select(GAME_DATE))
+```
+Much Better!
+
+```{r echo=FALSE}
+shots %>% write_csv("./data/shot_chart_cleaned.csv")
+```
+
+## Some preliminary visualizations
+
+```{r}
+shots <- shots %>%
+  mutate(year = year(mdy(GAME_DATE)))
+
+shots %>% ggplot(mapping = aes(x = year, fill = SHOT_TYPE)) + geom_bar(position = "fill")
+
+```
+ We find that the shot-zone-range variable actually gives us better insights here 
+```{r}
+  shots %>% ggplot(mapping = aes(x = year, fill = SHOT_ZONE_RANGE)) + geom_bar(position = "fill")
+```
+
+3 pointers did increase, but at the expense of 16-24 foot shots, NOT short-range. And, they used to hate 3 pointers. Chumps.

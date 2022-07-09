@@ -7,43 +7,47 @@
 #    http://shiny.rstudio.com/
 #
 
+
 library(shiny)
+library(tidyverse)
+library(jsonlite)
+library(lubridate)
+library(shinyWidgets)
+
+setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
+
+# players <- read_csv("./data/player_per_game_2022.csv")
+
+shot_data <- read_csv("./data/shot_chart_cleaned.csv")
+players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
+  
+  titlePanel("NBA Vis"),
+      
+  searchInput(
+      inputId = "search",
+      label = "pick a player",
+      value="LeBron James",
+      placeholder = "Pick a player",
+        btnSearch = "search"
+      )
 )
 
+
 # Define server logic required to draw a histogram
-server <- function(input, output) {
-
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-    })
+server <- function(input, output, session) {
+  
+  observe({
+    pie_data <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE) %>% slice(1:50)
+    jsonData <- toJSON(pie_data, pretty=TRUE)
+    session$sendCustomMessage(type="shot_zone_range", jsonData)
+  })
 }
 
-# Run the application 
-shinyApp(ui = ui, server = server)
+
+shinyApp(ui = htmlTemplate("www/index.html"), server = server)
+
+
+
