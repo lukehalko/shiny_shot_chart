@@ -11,8 +11,7 @@
 library(shiny)
 library(tidyverse)
 library(jsonlite)
-library(lubridate)
-library(shinyWidgets)
+
 
 setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
 
@@ -21,21 +20,6 @@ setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
 shot_data <- read_csv("./data/shot_chart_cleaned.csv")
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
 
-# Define UI for application that draws a histogram
-ui <- fluidPage(
-  
-  titlePanel("NBA Vis"),
-      
-  searchInput(
-      inputId = "search",
-      label = "pick a player",
-      value="LeBron James",
-      placeholder = "Pick a player",
-        btnSearch = "search"
-      )
-)
-
-
 # Define server logic required to draw a histogram
 server <- function(input, output, session) {
   
@@ -43,6 +27,16 @@ server <- function(input, output, session) {
     pie_data <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE) %>% slice(1:50)
     jsonData <- toJSON(pie_data, pretty=TRUE)
     session$sendCustomMessage(type="shot_zone_range", jsonData)
+  })
+  observe({
+    pie_data <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE) %>% slice(1:50)
+    jsonData <- toJSON(pie_data, pretty=TRUE)
+    session$sendCustomMessage(type="pie2", jsonData)
+  })
+  observe({
+    pie_data <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE) %>% slice(1:50)
+    jsonData <- toJSON(pie_data, pretty=TRUE)
+    session$sendCustomMessage(type="pie3", jsonData)
   })
 }
 

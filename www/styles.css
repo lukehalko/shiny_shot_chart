@@ -1,3 +1,4 @@
-.sideBar {
-    padding: 20, 20, 20, 20
+.lowerPanel {
+    background-color: aqua;
+    border-radius: 10%;
 }
