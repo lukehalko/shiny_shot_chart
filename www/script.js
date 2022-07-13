@@ -5,10 +5,10 @@ console.log("script.js is active")
     width = 460 - m.left - m.right,
     height = 400 - m.top - m.bottom;*/ 
 
-    height=300;
-    width=300;
-
-let data;
+    height=250;
+    width=100;
+    skinny = 250  
+    let data;
 
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ PIE CHART #1 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
@@ -26,9 +26,9 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     const svg = d3.select(".shotZoneRange")
           .append("svg")
           .attr("id", "pieChart")
-          .attr("height", height)
-          .attr("width", width)
-          .attr("viewBox",`0 0 500 500`)
+          .attr("height", 250)
+          .attr("width", skinny)
+          .attr("viewBox",`-25 -25 500 500`)
           .append("g")
           .attr("transform", `translate(${width/2}, ${height/2})`)
   
@@ -87,9 +87,9 @@ Shiny.addCustomMessageHandler('pie2', function (message) {
   const svg = d3.select(".pieTwo")
         .append("svg")
         .attr("id", "pieChart2")
-        .attr("height", height)
-        .attr("width", width)
-        .attr("viewBox",`0 0 500 500`)
+        .attr("height", 250)
+        .attr("width", skinny)
+        .attr("viewBox",`-25 -25 500 500`)
         .append("g")
         .attr("transform", `translate(${width/2}, ${height/2})`)
 
@@ -126,9 +126,9 @@ Shiny.addCustomMessageHandler('pie3', function (message) {
   const svg = d3.select(".pieThree")
         .append("svg")
         .attr("id", "pieChart3")
-        .attr("height", height)
-        .attr("width", width)
-        .attr("viewBox",`0 0 500 500`)
+        .attr("height", 250)
+        .attr("width", skinny)
+        .attr("viewBox",`-25 -25 500 500`)
         .append("g")
         .attr("transform", `translate(${width/2}, ${height/2})`)
 
@@ -147,3 +147,5 @@ svg.selectAll('whatever')
 .style("stroke-width", "2px")
 .style("opacity", 0.7)
 })
+
+
