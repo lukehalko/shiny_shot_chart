@@ -1,10 +1,10 @@
 let width = 450
 let height = 450
 
+let shot_data
+
 Shiny.addCustomMessageHandler('shotlocation', function(message){
-    console.log("RECIEVED SHOT LOCATION DATA")
-    let data = message;
-    
+    let data = shot_data = message;
     d3.select("#shotLocation").remove()
 
     const svg = d3.select(".shotChart")
@@ -29,5 +29,6 @@ Shiny.addCustomMessageHandler('shotlocation', function(message){
         .attr("cx", d=>x(d["LOC_X"]))
         .attr("cy", d=>y(d["LOC_Y"]))
         .attr("r", 2.5)
+        .attr("class", d=>`${d["SHOT_ZONE_RANGE"].replaceAll(" ", "").replace(/^/, "C").replaceAll(".","").replaceAll("-","").replaceAll("+", "")}`)
         .style("fill", "black")
 })

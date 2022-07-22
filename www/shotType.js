@@ -35,7 +35,6 @@ Shiny.addCustomMessageHandler('shot_type', function (message) {
   .attr("stroke", "white")
   .style("stroke-width", "2px")
   .style("opacity", 0.7).on("mouseover", ()=>{
-    console.log("hi!")
     svg.selectAll("dots")
     .data(keys)
     .enter()
