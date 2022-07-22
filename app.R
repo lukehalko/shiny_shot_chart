@@ -1,28 +1,23 @@
-library(shiny)
+library(shiny) 
 library(tidyverse)
-library(jsonlite)
+library(jsonlite)  
 
 setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
-
+ 
 shot_data <- read_csv("./data/shot_chart_cleaned.csv")
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
 
 server <- function(input, output, session) {
   
   observe({
-    pie_data <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE)
-    jsonData <- toJSON(pie_data, pretty=TRUE)
+    shot_range <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE)
+    jsonData <- toJSON(shot_range, pretty=TRUE)
     session$sendCustomMessage(type="shot_zone_range", jsonData)
-  })
+  }) 
   observe({
-    pie_data <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE)
-    jsonData <- toJSON(pie_data, pretty=TRUE)
-    session$sendCustomMessage(type="pie2", jsonData)
-  })
-  observe({
-    pie_data <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE)
-    jsonData <- toJSON(pie_data, pretty=TRUE)
-    session$sendCustomMessage(type="pie3", jsonData)
+    shot_type <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_TYPE)
+    jsonData <- toJSON(shot_type, pretty=TRUE)
+    session$sendCustomMessage(type="shot_type", jsonData)
   })
   
   observe({
