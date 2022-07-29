@@ -13,7 +13,7 @@ Shiny.addCustomMessageHandler('shotlocation', function(message){
     .attr("width", width)
     .attr("id", "shotLocation")
     .append("g")
-    .attr("transform", `translate(0,-10)`)
+    .attr("transform", `translate(0,-40)`)
 
     const x = d3.scaleLinear()
       .domain([-250, 250])

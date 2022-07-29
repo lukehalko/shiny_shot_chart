@@ -1,16 +1,17 @@
-library(shiny)  
-library(tidyverse) 
-library(jsonlite)   
+library(shiny) 
+library(tidyverse)
+library(jsonlite) 
 setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")    
  
 shot_data <- read_csv("./data/shot_chart_cleaned.csv")
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
 
+
 server <- function(input, output, session) { 
   
   observe({ 
     shot_range <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_ZONE_RANGE)
-    jsonData <- toJSON(shot_range, pretty=TRUE)
+    jsonData <- toJSON(shot_range, pretty=TRUE) 
     session$sendCustomMessage(type="shot_zone_range", jsonData)
   }) 
   observe({
@@ -19,12 +20,22 @@ server <- function(input, output, session) {
     session$sendCustomMessage(type="shot_type", jsonData)
   })
   
-  # Send shot location data 
+  # Send shot location data
+  
   observe({
     shot_loc <- shot_data %>% filter(PLAYER_NAME==input$search) %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y)
     jsonData <- toJSON(shot_loc, pretty=TRUE)    
     session$sendCustomMessage(type="shotlocation", jsonData)
   })
+  
+  observe({
+    shot_dist <- shot_data %>%
+      filter(PLAYER_NAME==input$search & SHOT_DISTANCE < 40) %>% 
+      select(SHOT_DISTANCE)
+    
+    jsonData <- toJSON(shot_dist, pretty=TRUE) 
+    session$sendCustomMessage(type="shot_distance", jsonData) 
+  }) 
 }
 
 

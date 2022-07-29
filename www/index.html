@@ -34,14 +34,17 @@
         <div class="p-5 d-flex align-items-center viewWrapper"> 
                 <div class="container viewArea">
                     <div class="d-flex flex-row justify-content-center">
-                        <img src="./img/court-diagram-removebg-preview.png" height="450" width="450">
-                        <div class="shotChart"></div>
+                        <!-- <img id="court-img" src="./img/court-diagram-removebg-preview.png" height="450" width="450"/> -->
+                        <div class="p-1 d-flex align-items-start shotChart"></div>
+                        <div class="p-1 d-flex align-items-end shotDistance"></div>
                     </div>
                     <div class="d-flex flex-row justify-content-center">
                         <!-- row 2: pie charts -->
                             <div class="shotZoneRange"></div>
                             <div class="pieTwo"></div>
-                            <div class="pieThree"></div>
+                    </div>
+                    <!-- <div class="d-flex flex-row justify-content-center"> -->
+                        <!-- <div class="shotDistance"></div> -->
                     </div>
                 </div>
             </div>
@@ -52,6 +55,7 @@
     <script src="shotRange.js"></script>
     <script src="shotType.js"></script>
     <script src="shotChart.js"></script>
+    <script src="shotDistance.js"></script>
 </body>
 
 </html>
