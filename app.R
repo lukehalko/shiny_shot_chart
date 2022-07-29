@@ -1,7 +1,7 @@
 library(shiny)  
 library(tidyverse) 
 library(jsonlite)   
-setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")   
+setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")    
  
 shot_data <- read_csv("./data/shot_chart_cleaned.csv")
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct()

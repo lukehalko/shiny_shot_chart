@@ -1,0 +1,19 @@
+.sideBar{
+    float: left;
+    padding: 20px;
+    background-color: #73777B;
+    border-radius: 12px;
+    height: 100%;
+}
+
+.viewArea{
+    background-color: #F1EEE9;
+    border-radius: 12px;
+    border: #15133C;
+}
+
+.shotChart{
+    position: absolute;
+    float: center;
+}
+

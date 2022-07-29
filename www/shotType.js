@@ -15,9 +15,9 @@ Shiny.addCustomMessageHandler('shot_type', function (message) {
     const svg = d3.select(".pieTwo")
           .append("svg")
           .attr("id", "pieChart2")
-          .attr("height", 500)
+          .attr("height", 250)
           .attr("width", 250)
-          .attr("viewBox",`-25 200 500 500`)
+          .attr("viewBox",`-25 -25 500 500`)
           .append("g")
           .attr("transform", `translate(${width/2}, ${height/2})`)
   

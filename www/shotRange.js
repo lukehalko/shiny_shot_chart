@@ -28,9 +28,9 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     const svg = d3.select(".shotZoneRange")
           .append("svg")
           .attr("id", "pieChart")
-          .attr("height", 500)
+          .attr("height", 250)
           .attr("width", o_width)
-          .attr("viewBox",`-25 200 500 500`)
+          .attr("viewBox",`-25 -25 500 500`)
           .append("g")
           .attr("transform", `translate(${width/2}, ${height/2})`)
   
@@ -104,7 +104,6 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     cat = e.target.__data__.data[0]
     dot_class = cleanStr(cat)    
     d3.selectAll(`.${dot_class}`).attr("stroke", color(cat))
-
   })
   
   .on("mouseout", (e) => {
