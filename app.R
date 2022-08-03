@@ -1,9 +1,9 @@
-library(shiny) 
-library(tidyverse)
-library(jsonlite) 
+library(shiny)    
+library(tidyverse)  
+library(jsonlite)   
 setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")    
  
-shot_data <- read_csv("./data/shot_chart_cleaned.csv")
+shot_data <- read_csv("./data/shot_chart_cleaned.csv")  
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
 
 
@@ -24,10 +24,10 @@ server <- function(input, output, session) {
   
   observe({
     shot_loc <- shot_data %>% filter(PLAYER_NAME==input$search) %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y)
-    jsonData <- toJSON(shot_loc, pretty=TRUE)    
+    jsonData <- toJSON(shot_loc, pretty=TRUE)
     session$sendCustomMessage(type="shotlocation", jsonData)
   })
-  
+     
   observe({
     shot_dist <- shot_data %>%
       filter(PLAYER_NAME==input$search & SHOT_DISTANCE < 40) %>% 
@@ -40,4 +40,4 @@ server <- function(input, output, session) {
 
 
 # No UI function necessary. I'll create the UI manual through an HTML file that I control.
-shinyApp(ui = htmlTemplate("www/index.html"), server = server)
+shinyApp(ui = htmlTemplate("www/index.html"), server = server) 

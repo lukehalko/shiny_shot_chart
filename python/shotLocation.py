@@ -4,11 +4,12 @@ import json
 
 from nba_api.stats.endpoints import shotchartdetail
 from nba_api.stats.static import players as p
-
+i=0
 def getShotData(id):
     resp = shotchartdetail.ShotChartDetail(
     team_id=0,
-    player_id= id
+    player_id= id,
+    context_measure_simple = 'FGA'
     )   
     json_data = json.loads(resp.get_json())
     data = json_data["resultSets"][0]
@@ -25,6 +26,7 @@ for player in players:
     player_ids.append(player["id"])
 
 for id in player_ids:
+    i += 1
     data = getShotData(id)
 
     columns = data["headers"]
@@ -35,8 +37,8 @@ for id in player_ids:
         df.columns = columns
     else:
         df = df.append(rows)
-    
-    print("collected player")
+        
+    print("collected player " + str(i))
 
 df.to_csv("shot_chart_details.csv")
 

@@ -6,7 +6,7 @@ const cleanStr = (s) => {
 
     height=250;
     width=100;
-    o_width = 250   // For some reason it breaks when I try to name this variable width? 
+    o_width = 500;   // For some reason it breaks when I try to name this variable width? 
     let click;
     let clicked = false;
 
@@ -30,7 +30,7 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
           .attr("id", "pieChart")
           .attr("height", 250)
           .attr("width", o_width)
-          .attr("viewBox",`-25 -25 500 500`)
+          .attr("viewBox",`250 -25 500 500`)
           .append("g")
           .attr("transform", `translate(${width/2}, ${height/2})`)
   
@@ -48,9 +48,33 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     .innerRadius(radius)   // This is the size of the donut hole
     .outerRadius(100)
   ).attr("fill", d => color(d.data[0]))
-  .attr("stroke", "white")
+  .attr("stroke", "rgb(234, 238, 239)")
   .style("stroke-width", "2px")
   .style("opacity", 0.7)
+
+  .on("mouseover", (e) => {
+    dot_class = cleanStr(e.target.__data__.data[0])
+    
+    // hide all dots not in the category that you clicked
+    for (k in keys){
+      cat = keys[k]
+        if(cleanStr(keys[k])!=dot_class){
+          d3.selectAll(`.${cleanStr(cat)}`).style("fill", "gray")
+        }
+    }
+  })
+
+  .on("mouseout", (e) => {
+    dot_class = cleanStr(e.target.__data__.data[0])
+    
+    // hide all dots not in the category that you clicked
+    for (k in keys){
+      cat = keys[k]
+        if(cleanStr(keys[k])!=dot_class){
+          d3.selectAll(`.${cleanStr(cat)}`).style("fill", "black")
+        }
+    }
+  })
   
   .on("click",(e)=>{ 
     clicked = !clicked
@@ -72,17 +96,13 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
       }
     }
   })
-  
-  .on("mouseover", (e)=>{
-    // On Mouse Hover
 
-    // Render labels 
     svg.selectAll("dots")
     .data(keys)
     .enter()
     .append("circle")
-    .attr("cx", -55)
-    .attr("cy", (d,i)=>280 + i*40)
+    .attr("cx", 300)
+    .attr("cy", (d,i)=> 0 + i*40)
     .attr("r", 17)
     .attr("class","label")
     .style("fill", d => color(d))
@@ -91,8 +111,8 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     .data(keys)
     .enter()
     .append("text")
-    .attr("x", -15)
-    .attr("y", (d,i) => 280 + i*40)
+    .attr("x", 350)
+    .attr("y", (d,i) => 1 + i*40)
     .style("fill", d => color(d))
     .style("font-size", "30px")
     .attr("class", "label")
@@ -100,18 +120,17 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     .attr("text-anchor", "left")
     .style("alignment-baseline", "middle")
 
-    // highlight selected area on shot chart
-    cat = e.target.__data__.data[0]
-    dot_class = cleanStr(cat)    
-    d3.selectAll(`.${dot_class}`).attr("stroke", color(cat))
-  })
+    // // highlight selected area on shot chart
+    // cat = e.target.__data__.data[0]
+    // dot_class = cleanStr(cat)    
+    // d3.selectAll(`.${dot_class}`).attr("stroke", color(cat))
   
   .on("mouseout", (e) => {
-    // Delete labels on mouseout
-    d3.selectAll(".label").remove()
+    // // Delete labels on mouseout
+    // d3.selectAll(".label").remove()
 
-    // Remove highlight on mouseout
-    dot_class = cleanStr(e.target.__data__.data[0])
-    d3.selectAll(`.${dot_class}`).attr("stroke","transparent")
+    // // Remove highlight on mouseout
+    // dot_class = cleanStr(e.target.__data__.data[0])
+    // d3.selectAll(`.${dot_class}`).attr("stroke","transparent")
   })
 })

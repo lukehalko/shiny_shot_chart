@@ -1,37 +1,41 @@
 body{
-    background-color: #F1EEE9 !important;
+    background-image: url("./img/fabric.webp");
 }
 
 .sideBar{
     float: left;
     padding: 25px;
-    background-color: #73777B;
+    background-color: #99a0a7;
     border-radius: 12px;
     height: 100%;
-    box-shadow: 10px 10px 2px #15133C;
+    box-shadow: -3px 3px 10px #3b3b3bdd;
 }
 
 .viewArea{
-    background-color:rgb(255, 221, 158);
+    background-color:rgb(234, 238, 239);
     border-radius: 12px;
     border: #15133C;
-    box-shadow: 10px 10px 2px #15133C;
+    box-shadow: -3px 3px 10px #3b3b3bdd;
 }
 
-/*.shotChart{
-    position: absolute;
-    float: center;
-}*/
 
 /*.shotDistance{
     position: relative;
     left: 40px
 }*/
 
-#court-img{
+.court-wrapper{
     position: relative;
+}
+
+/*#court-img{
+    position: absolute;
     bottom: 116px;
     left: 30px;
     transform: scale(1.7)
-}
+}*/
+
+.court-wrapper svg {
+    position: absolute;
+  }
 

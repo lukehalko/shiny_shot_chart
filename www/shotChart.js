@@ -15,6 +15,10 @@ Shiny.addCustomMessageHandler('shotlocation', function(message){
     .append("g")
     .attr("transform", `translate(0,-40)`)
 
+    svg.append("image")
+    .attr("href", "./img/nba-halfcourt-diagram-removebg-preview.png")
+    .attr("transform", "rotate(180) translate(-139,15) scale(1.45)")
+    .attr("transform-origin", "50% 50%")
     const x = d3.scaleLinear()
       .domain([-250, 250])
       .range([0,width])

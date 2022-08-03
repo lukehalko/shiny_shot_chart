@@ -11,14 +11,14 @@ Shiny.addCustomMessageHandler("shot_distance", (message) => {
         .attr("height", 400)
         .attr("width", 200)
         .attr("id", "violin")
-        .attr("viewBox", "-500 20 1000 1000")
+        .attr("viewBox", "-500 600 1000 1000")
         .append("g")
 
     const y = d3.scaleLinear()
         .domain([0, 40])
-        .range([1400, 0])
+        .range([2000, 0])
 
-
+    svg.append("g").call(d3.axisLeft(y)).attr("x", 50)
 
 
     // const x = d3.scaleBand()
@@ -44,4 +44,5 @@ Shiny.addCustomMessageHandler("shot_distance", (message) => {
         .style("fill", "#15133C")
         .style("filter", "drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4))")
         .attr("d", (d) => area(hist(d)))
+        .attr("class", (d) => `${d}`)
 })
