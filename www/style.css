@@ -39,3 +39,39 @@ body{
     position: absolute;
   }
 
+.show {
+    display: flex;
+    background-color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 4px;
+}
+
+.show a{
+    color: black;
+    text-decoration: none;
+}
+
+.filterCard{
+    background-color: whitesmoke;
+    box-shadow: -1px 0px 8px black;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    padding: 5px
+}
+
+.filterCard:hover{
+    background-color: #dbdbdb;
+}
+
+
+#filterContainer {
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 20em;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
