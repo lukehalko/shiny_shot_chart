@@ -85,8 +85,11 @@ d3.selectAll(".filters").on("click", (e) => {
 
             checkbox.append("input")
                 .attr("type", "checkbox")
-                .attr("name", "teamForm")
+                .attr("name", "teamFilter")
                 .attr("value", tid)
+                .text(tid)
+
+            checkbox.append("span")
 
 
         })

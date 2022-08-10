@@ -9,20 +9,19 @@ shot_data <- read_csv("./data/shot_chart_cleaned.csv")
 
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
 
-
 server <- function(input, output, session) {   
     
   # Shot Zone (Text Description)  
   player_data <- reactive({
     d <- shot_data %>% filter(PLAYER_NAME == input$search)     
      
-    # if(input$team != "" && !input$allTeam){  
+    # if(input$team != "" && !input$allTeam){    
     #   d <- d %>% filter(TEAM_ID == input$team) 
     # }
-    d  
-  })  
+    d
+  }) 
     
-  observeEvent(input$teamFilter, { 
+  observeEvent(input$teamFilter, {  
     print("checkbox: ") 
     print(input$teamFilter)
   }) 
@@ -32,15 +31,15 @@ server <- function(input, output, session) {
     
   })
 
-  
-  observe({  
+   
+  observe({   
     # print("team input:")
     # print(input$team)
       
     # player_data <- shot_data %>% filter(PLAYER_NAME == input$search) 
     
     shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
-    jsonData <- toJSON(shot_range, pretty=TRUE) 
+    jsonData <- toJSON(shot_range, pretty=TRUE)  
     session$sendCustomMessage(type="shot_zone_range", jsonData) 
     
     # Shot Location (For Shot Chart)
