@@ -51,4 +51,10 @@ shots %>% ggplot(mapping = aes(x = year, fill = SHOT_TYPE)) + geom_bar(position 
   shots %>% filter(PLAYER_NAME == "Stephen Curry") %>% ggplot(mapping = aes(x = PLAYER_NAME, y=SHOT_DISTANCE)) + geom_violin(trim=FALSE)
 ```
 
-3 pointers did increase, but at the expense of 16-24 foot shots, NOT short-range. And, they used to hate 3 pointers. Chumps.
+
+
+```{r}
+
+```
+
+

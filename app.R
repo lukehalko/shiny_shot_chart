@@ -3,59 +3,76 @@ library(tidyverse)
 library(jsonlite)
 library(easyr) 
 
-setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")  
+setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
    
-shot_data <- read_csv("./data/shot_chart_cleaned.csv")
+shot_data <- read_csv("./data/shot_chart_cleaned.csv") 
 
-players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
+players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
 
-  
-server <- function(input, output, session) {  
+
+server <- function(input, output, session) {   
     
-  # Shot Zone (Text Description) 
+  # Shot Zone (Text Description)  
   player_data <- reactive({
-    d <- shot_data %>% filter(PLAYER_NAME == input$search)  
+    d <- shot_data %>% filter(PLAYER_NAME == input$search)     
+     
+    # if(input$team != "" && !input$allTeam){  
+    #   d <- d %>% filter(TEAM_ID == input$team) 
+    # }
+    d  
+  })  
     
-    if(input$team != ""){   
-      d <- d %>% filter(TEAM_ID == input$team)     
-    }
-    
-    d 
-  })
-    
-  observe({  
-    print("team input:")
-    print(input$team)
-    
-    # player_data <- shot_data %>% filter(PLAYER_NAME == input$search)
-       
-    shot_range <- player_data() %>% count(SHOT_ZONE_RANGE)  
-    jsonData <- toJSON(shot_range, pretty=TRUE)
-    session$sendCustomMessage(type="shot_zone_range", jsonData)
-    
-    shot_loc <- player_data() %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y) 
-    jsonData <- toJSON(shot_loc, pretty=TRUE) 
-    session$sendCustomMessage(type="shotlocation", jsonData)
-    
-    shot_dist <- player_data() %>%
-      filter(SHOT_DISTANCE < 40) %>%  
-      select(SHOT_DISTANCE)   
-    
-    jsonData <- toJSON(shot_dist, pretty=TRUE) 
-    session$sendCustomMessage(type="shot_distance", jsonData)
+  observeEvent(input$teamFilter, { 
+    print("checkbox: ") 
+    print(input$teamFilter)
   }) 
   
-  # Shot Type (2PT or 3PT)
-  # observe({
-  #   shot_type <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_TYPE)
-  #   jsonData <- toJSON(shot_type, pretty=TRUE)
-  #   session$sendCustomMessage(type="shot_type", jsonData) 
-  # }) 
-  
-  # Shot Location (For Shot Chart)
-   
-  # Shot Distance (For Violin Plot)   
+   # 
+  observeEvent(input$search, {
+    
+  })
 
+  
+  observe({  
+    # print("team input:")
+    # print(input$team)
+      
+    # player_data <- shot_data %>% filter(PLAYER_NAME == input$search) 
+    
+    shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
+    jsonData <- toJSON(shot_range, pretty=TRUE) 
+    session$sendCustomMessage(type="shot_zone_range", jsonData) 
+    
+    # Shot Location (For Shot Chart)
+    shot_loc <- player_data() %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y) 
+    jsonData <- toJSON(shot_loc, pretty=TRUE)
+    session$sendCustomMessage(type="shotlocation", jsonData)  
+    
+    # Shot Distance (For Violin Plot)  
+    shot_dist <- player_data() %>%
+      filter(SHOT_DISTANCE < 40) %>%
+      select(SHOT_DISTANCE)
+    
+    jsonData <- toJSON(shot_dist, pretty=TRUE)
+    session$sendCustomMessage(type="shot_distance", jsonData)
+    
+    # Filter data for a given player: teams, seasons, teamsAgainst, game dates (?) and date range (?)
+    teams <- player_data() %>%
+      select(TEAM_ID) %>%
+      distinct()
+
+    # seasons <- player_data() %>%
+    #   select(GAME_DATE)%>%
+    #   distinct()
+
+    # teams_against <- player_data() %>% 
+    #   select(AGAINST) %>%
+    #   distinct()
+
+    jsonData <- toJSON(teams, pretty=TRUE)
+    session$sendCustomMessage(type="team_filter", jsonData)
+    
+  }) 
 }
 
 # No UI function necessary. I'll create the UI manual through an HTML file that I control.
