@@ -47,35 +47,53 @@
                     <div class="resultsArea">
 
                         <ul id="filterOptions" class="list-group" hidden>
-                            <li class="list-group-item filters">Season</li>
+                            <li class="list-group-item filters">Year</li> <!-- TODO: Should be season -->
                             <li class="list-group-item filters">Team</li>
                             <li class="list-group-item filters">Against</li>
-                            <li class="list-group-item filters">Game Date</li>
+                            <!-- <li class="list-group-item filters">Game</li> -->
                             <li class="list-group-item filters">Date Range</li>
-                          </ul>
+                        </ul>
+
+
+                          <!-- HTML for filtering by year -->
+                          <form id="yearForm" hidden>
+                            
+                            <div id="yearFilter" class="shiny-input-checkboxgroup" role="group" aria-labelledby="yearFilter-label">
+                                <label id="yearFilter-label" class="control-label" for="yearFilter" hidden>
+                                    Year Label
+                                </label>
+                                <input type="text" id="year" hidden>
+                                <button type="submit" hidden>submit</button>
+                                <div class="shiny-options-group" id="yearOptions"></div>
+                            </div>
+                          </form>
+                          <!-------------------------------->
+
 
                           <!-- HTML for filtering by team -->
                         <form id="teamForm" hidden>
                             
                             <div id="teamFilter" class="shiny-input-checkboxgroup" role="group" aria-labelledby="teamFilter-label">
                                 <label id="teamFilter-label" class="control-label" for="teamFilter" hidden>
-                                    The Big Label
+                                    Team Label
                                 </label>
                                 <input type="text" id="team" hidden>
                                 <button type="submit" hidden>submit</button>
-                                <div class="shiny-options-group">
-                                </div>
+                                <div class="shiny-options-group" id="teamOptions"></div>
                             </div>
                         </form>
+                        <!-------------------------------->
+
                     </div>
-                            <!-------------------------------->
+                          
+                            <!-- HTML for filtering by Date Range -->
 
-                            <!-- HTML for filtering by  -->
-                            <!-------------------------------->
-                
+                            
 
+                            <!-------------------------------->
 
             </div>
+            <!-- END RESULTS AREA -->
         </div>
         <div class="p-5 d-flex align-items-center viewWrapper"> 
             <div class="container viewArea">
