@@ -7,7 +7,7 @@ setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
    
 shot_data <- read_csv("./data/shot_chart_cleaned.csv") 
 
-players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
+shoplayers <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
 
 server <- function(input, output, session) {   
     
@@ -15,22 +15,15 @@ server <- function(input, output, session) {
   player_data <- reactive({
     d <- shot_data %>% filter(PLAYER_NAME == input$search)     
      
+    if(length(input$teamFilter) > 0){
+      d <- d %>% filter(TEAM_ID %in% input$teamFilter)
+    }
+      
     # if(input$team != "" && !input$allTeam){    
     #   d <- d %>% filter(TEAM_ID == input$team) 
     # }
     d
   }) 
-    
-  observeEvent(input$teamFilter, {  
-    print("checkbox: ") 
-    print(input$teamFilter)
-  }) 
-  
-   # 
-  observeEvent(input$search, {
-    
-  })
-
    
   observe({   
     # print("team input:")
