@@ -8,8 +8,7 @@ i=0
 def getShotData(id):
     resp = shotchartdetail.ShotChartDetail(
     team_id=0,
-    player_id= id,
-    context_measure_simple = 'FGA'
+    player_id= id
     )   
     json_data = json.loads(resp.get_json())
     data = json_data["resultSets"][0]

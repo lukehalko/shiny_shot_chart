@@ -4,10 +4,11 @@ output: html_document
 ---
 
 ```{r setup}
-library(tidyverse)
+library(tidyverse) 
 library(reticulate)
 library(knitr)
 library(lubridate)
+
 shot_data <- read_csv("./data/shot_chart_details.csv")
 ```
 
@@ -54,6 +55,8 @@ shots %>% ggplot(mapping = aes(x = year, fill = SHOT_TYPE)) + geom_bar(position 
 
 
 ```{r}
+
+shot_data %>% select(PLAYER_NAME,n) %>% distinct()
 
 ```
 

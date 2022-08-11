@@ -34,7 +34,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$yearFilter, {
     print(input$yearFilter)
-  }) 
+  })
   
   observe({   
     

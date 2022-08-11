@@ -5,7 +5,9 @@ Shiny.addCustomMessageHandler("shot_distance", (message) => {
     message.forEach(d => data.push(d.SHOT_DISTANCE))
     test = data
     d3.select("#violin").remove()
+
     // const name = data[0].PLAYER_NAME
+    
     const svg = d3.select(".shotDistance")
         .append("svg")
         .attr("height", 400)
