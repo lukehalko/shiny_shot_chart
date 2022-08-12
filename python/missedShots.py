@@ -4,6 +4,7 @@
 #   Collecting nba shot chart history for all active players from nba.api.stats --- includes both made and missed shots
 #   
 #   587 players in 970.525438785553 seconds
+# 
 
 import numpy
 import pandas as pd
@@ -12,7 +13,6 @@ import time
 
 
 from nba_api.stats.endpoints import shotchartdetail
-from urllib3 import Retry
 
 start_time = time.time()
 
@@ -37,21 +37,30 @@ cols = data["headers"]
 df = pd.DataFrame(columns = cols)
 
 for id in active_players["id"]:
+    sleep_count = 0
     while(True):
         try:
             shot_data = getShotData(id)
-            df.append(shot_data["rowSet"])
+
+            df = df.append(shot_data["rowSet"])
 
             break
     
         except:
             print("query failed... trying again")
-            time.sleep(3)
+            if(sleep_count < 6):
+                time.sleep(3)
+
+            else: time.sleep(10)
+            
+            sleep_count+=1
 
     count += 1
     print(f"got shots for player {count} : {id}")
 
 print(f"Done! Retrieved career shooting data for {count} players in {time.time() - start_time} seconds")
+
+df.to_csv("./data/new_shot_data.csv")
     
 
     

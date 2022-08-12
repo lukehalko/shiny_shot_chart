@@ -6,7 +6,7 @@ library(lubridate)
 
 setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
    
-shot_data <- read_csv("./data/shot_chart_cleaned.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
+shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
 
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
 
@@ -32,10 +32,6 @@ server <- function(input, output, session) {
     
   }) 
   
-  observeEvent(input$yearFilter, {
-    print(input$yearFilter)
-  })
-  
   observe({   
     
     shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
@@ -54,29 +50,40 @@ server <- function(input, output, session) {
     
     jsonData <- toJSON(shot_dist, pretty=TRUE)
     session$sendCustomMessage(type="shot_distance", jsonData) 
-    
+     
     # Filter data for a given player: teams, seasons, teamsAgainst, game dates (?) and date range (?)
     teams <- player_data() %>%
-      select(TEAM_ID) %>%
-      distinct()
+      select(TEAM_ID) %>% 
+      distinct() 
 
-     seasons <- player_data() %>%
+     seasons <- player_data() %>% 
        select(GAME_DATE)%>%
        distinct() %>%
        mutate(year = year(GAME_DATE)) %>% 
        select(year) %>%
        distinct()
-
+      
+      
+     
     # teams_against <- player_data() %>%   
     #   select(AGAINST) %>%
     #   distinct()
+     
+     
+     player_id <- player_data() %>%
+       select(PLAYER_ID) %>%
+       distinct()
+     
+    
 
-    jsonData <- toJSON(teams, pretty=TRUE)
+    jsonData <- toJSON(teams, pretty=TRUE) 
     session$sendCustomMessage(type="team_filter", jsonData)
     
-    jsonData <- toJSON(seasons, pretty=TRUE)
+    jsonData <- toJSON(seasons, pretty=TRUE) 
     session$sendCustomMessage("season_filter", jsonData)
     
+    jsonData <- toJSON(player_id, pretty=TRUE)
+    session$sendCustomMessage("player_id", jsonData)
   }) 
 }
 

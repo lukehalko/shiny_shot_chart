@@ -60,4 +60,21 @@ shot_data %>% select(PLAYER_NAME,n) %>% distinct()
 
 ```
 
+```{r}
+
+new_data <- read_csv("./data/new_shot_data.csv")
+new_data <- new_data %>% select(-c(...1, 0))
+new_data <- new_data %>% select(1:24)
+new_data <- new_data %>% select(-c(1))
+new_data
+```
+
+
+```{r}
+shot_data %>% filter(PLAYER_NAME == "Precious Achiuwa")
+
+new_data <- new_data %>% mutate(GAME_DATE = paste(substr(GAME_DATE, 5, 6), substr(GAME_DATE, 7,8), substr(GAME_DATE, 1,4), sep="-"))
+
+new_data %>% write_csv("./data/active_players_fga.csv")
+```
 
