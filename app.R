@@ -1,27 +1,25 @@
 library(shiny) 
 library(tidyverse) 
-library(jsonlite)
+library(jsonlite) 
 library(easyr)
 library(lubridate)
-
+ 
 setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
-   
+     
 shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
 
-players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
+players <- shot_data %>% select(PLAYER_NAME) %>% distinct()  
 
-server <- function(input, output, session) {   
-    
-  # Shot Zone (Text Description)  
-  player_data <- reactive({
-    
+server <- function(input, output, session) {
+     
+  # Shot Zone (Text Description)    
+  player_data <- reactive({  
+              
     d <- shot_data %>% filter(PLAYER_NAME == input$search)     
-      
-    if(length(input$teamFilter) > 0){
-      
-      d <- d %>% filter(TEAM_ID %in% input$teamFilter)
-       
-    }
+         
+    if(length(input$teamFilter) > 0){ 
+      d <- d %>% filter(TEAM_ID %in% input$teamFilter)  
+    } 
     
     if(length(input$yearFilter) > 0){
       d <- d %>% filter(year(GAME_DATE) %in% input$yearFilter)
@@ -35,17 +33,17 @@ server <- function(input, output, session) {
   observe({   
     
     shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
-    jsonData <- toJSON(shot_range, pretty=TRUE)  
+    jsonData <- toJSON(shot_range, pretty=TRUE)
     session$sendCustomMessage(type="shot_zone_range", jsonData) 
     
-    # Shot Location (For Shot Chart)
-    shot_loc <- player_data() %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y) 
+    # Shot Location (For Shot Chart) 
+    shot_loc <- player_data() %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y, SHOT_MADE_FLAG) 
     jsonData <- toJSON(shot_loc, pretty=TRUE)
     session$sendCustomMessage(type="shotlocation", jsonData)  
     
     # Shot Distance (For Violin Plot)  
-    shot_dist <- player_data() %>%
-      filter(SHOT_DISTANCE < 40) %>%
+    shot_dist <- player_data() %>% 
+      filter(SHOT_DISTANCE < 40) %>% 
       select(SHOT_DISTANCE)
     
     jsonData <- toJSON(shot_dist, pretty=TRUE)
@@ -88,4 +86,7 @@ server <- function(input, output, session) {
 }
 
 # No UI function necessary. I'll create the UI manual through an HTML file that I control.
+
+
+
 shinyApp(ui = htmlTemplate("www/index.html"), server = server)

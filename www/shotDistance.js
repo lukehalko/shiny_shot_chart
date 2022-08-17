@@ -20,7 +20,7 @@ Shiny.addCustomMessageHandler("shot_distance", (message) => {
         .domain([0, 40])
         .range([2000, 0])
 
-    svg.append("g").call(d3.axisLeft(y)).attr("x", 50)
+    //svg.append("g").call(d3.axisLeft(y)).attr("x", 50)
 
 
     // const x = d3.scaleBand()
