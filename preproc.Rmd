@@ -4,10 +4,11 @@ output: html_document
 ---
 
 ```{r setup}
-library(tidyverse)
+library(tidyverse) 
 library(reticulate)
 library(knitr)
 library(lubridate)
+
 shot_data <- read_csv("./data/shot_chart_details.csv")
 ```
 
@@ -51,4 +52,29 @@ shots %>% ggplot(mapping = aes(x = year, fill = SHOT_TYPE)) + geom_bar(position 
   shots %>% filter(PLAYER_NAME == "Stephen Curry") %>% ggplot(mapping = aes(x = PLAYER_NAME, y=SHOT_DISTANCE)) + geom_violin(trim=FALSE)
 ```
 
-3 pointers did increase, but at the expense of 16-24 foot shots, NOT short-range. And, they used to hate 3 pointers. Chumps.
+
+
+```{r}
+
+shot_data %>% select(PLAYER_NAME,n) %>% distinct()
+
+```
+
+```{r}
+
+new_data <- read_csv("./data/new_shot_data.csv")
+new_data <- new_data %>% select(-c(...1, 0))
+new_data <- new_data %>% select(1:24)
+new_data <- new_data %>% select(-c(1))
+new_data
+```
+
+
+```{r}
+shot_data %>% filter(PLAYER_NAME == "Precious Achiuwa")
+
+new_data <- new_data %>% mutate(GAME_DATE = paste(substr(GAME_DATE, 5, 6), substr(GAME_DATE, 7,8), substr(GAME_DATE, 1,4), sep="-"))
+
+new_data %>% write_csv("./data/active_players_fga.csv")
+```
+

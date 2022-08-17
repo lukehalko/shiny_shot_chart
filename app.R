@@ -1,62 +1,92 @@
 library(shiny) 
 library(tidyverse) 
-library(jsonlite)
-library(easyr) 
+library(jsonlite) 
+library(easyr)
+library(lubridate)
+ 
+setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
+     
+shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
 
-setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")  
-   
-shot_data <- read_csv("./data/shot_chart_cleaned.csv")
+players <- shot_data %>% select(PLAYER_NAME) %>% distinct()  
 
-players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
-
-  
-server <- function(input, output, session) {  
+server <- function(input, output, session) {
+     
+  # Shot Zone (Text Description)    
+  player_data <- reactive({  
+              
+    d <- shot_data %>% filter(PLAYER_NAME == input$search)     
+         
+    if(length(input$teamFilter) > 0){ 
+      d <- d %>% filter(TEAM_ID %in% input$teamFilter)  
+    } 
     
-  # Shot Zone (Text Description) 
-  player_data <- reactive({
-    d <- shot_data %>% filter(PLAYER_NAME == input$search)  
-    
-    if(input$team != ""){   
-      d <- d %>% filter(TEAM_ID == input$team)     
+    if(length(input$yearFilter) > 0){
+      d <- d %>% filter(year(GAME_DATE) %in% input$yearFilter)
+
     }
     
-    d 
-  })
+    d
     
-  observe({  
-    print("team input:")
-    print(input$team)
-    
-    # player_data <- shot_data %>% filter(PLAYER_NAME == input$search)
-       
-    shot_range <- player_data() %>% count(SHOT_ZONE_RANGE)  
-    jsonData <- toJSON(shot_range, pretty=TRUE)
-    session$sendCustomMessage(type="shot_zone_range", jsonData)
-    
-    shot_loc <- player_data() %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y) 
-    jsonData <- toJSON(shot_loc, pretty=TRUE) 
-    session$sendCustomMessage(type="shotlocation", jsonData)
-    
-    shot_dist <- player_data() %>%
-      filter(SHOT_DISTANCE < 40) %>%  
-      select(SHOT_DISTANCE)   
-    
-    jsonData <- toJSON(shot_dist, pretty=TRUE) 
-    session$sendCustomMessage(type="shot_distance", jsonData)
   }) 
   
-  # Shot Type (2PT or 3PT)
-  # observe({
-  #   shot_type <- shot_data %>% filter(PLAYER_NAME==input$search) %>% count(SHOT_TYPE)
-  #   jsonData <- toJSON(shot_type, pretty=TRUE)
-  #   session$sendCustomMessage(type="shot_type", jsonData) 
-  # }) 
-  
-  # Shot Location (For Shot Chart)
-   
-  # Shot Distance (For Violin Plot)   
+  observe({   
+    
+    shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
+    jsonData <- toJSON(shot_range, pretty=TRUE)
+    session$sendCustomMessage(type="shot_zone_range", jsonData) 
+    
+    # Shot Location (For Shot Chart) 
+    shot_loc <- player_data() %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y, SHOT_MADE_FLAG) 
+    jsonData <- toJSON(shot_loc, pretty=TRUE)
+    session$sendCustomMessage(type="shotlocation", jsonData)  
+    
+    # Shot Distance (For Violin Plot)  
+    shot_dist <- player_data() %>% 
+      filter(SHOT_DISTANCE < 40) %>% 
+      select(SHOT_DISTANCE)
+    
+    jsonData <- toJSON(shot_dist, pretty=TRUE)
+    session$sendCustomMessage(type="shot_distance", jsonData) 
+     
+    # Filter data for a given player: teams, seasons, teamsAgainst, game dates (?) and date range (?)
+    teams <- player_data() %>%
+      select(TEAM_ID) %>% 
+      distinct() 
 
+     seasons <- player_data() %>% 
+       select(GAME_DATE)%>%
+       distinct() %>%
+       mutate(year = year(GAME_DATE)) %>% 
+       select(year) %>%
+       distinct()
+      
+      
+     
+    # teams_against <- player_data() %>%   
+    #   select(AGAINST) %>%
+    #   distinct()
+     
+     
+     player_id <- player_data() %>%
+       select(PLAYER_ID) %>%
+       distinct()
+     
+    
+
+    jsonData <- toJSON(teams, pretty=TRUE) 
+    session$sendCustomMessage(type="team_filter", jsonData)
+    
+    jsonData <- toJSON(seasons, pretty=TRUE) 
+    session$sendCustomMessage("season_filter", jsonData)
+    
+    jsonData <- toJSON(player_id, pretty=TRUE)
+    session$sendCustomMessage("player_id", jsonData)
+  }) 
 }
 
 # No UI function necessary. I'll create the UI manual through an HTML file that I control.
+
+
+
 shinyApp(ui = htmlTemplate("www/index.html"), server = server)

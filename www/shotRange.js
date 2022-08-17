@@ -66,12 +66,12 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
 
   .on("mouseout", (e) => {
     dot_class = cleanStr(e.target.__data__.data[0])
-    
+
     // hide all dots not in the category that you clicked
     for (k in keys){
       cat = keys[k]
         if(cleanStr(keys[k])!=dot_class){
-          d3.selectAll(`.${cleanStr(cat)}`).style("fill", "black")
+          d3.selectAll(`.${cleanStr(cat)}`).style("fill", d => d["SHOT_MADE_FLAG"]==0? "red":"green")
         }
     }
   })

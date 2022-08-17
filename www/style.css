@@ -1,5 +1,5 @@
 body{
-    background-image: url("./img/fabric.webp");
+    background-image: url("./img/dots.webp");
 }
 
 .sideBar{
@@ -10,6 +10,24 @@ body{
     height: 100%;
     box-shadow: -3px 3px 10px #3b3b3bdd;
 }
+
+.playerImage{
+    border-radius: 50%;
+    max-width: 100%;
+    height:auto
+}
+
+.circle {
+    background-color:rgb(200, 225, 231);
+    border-radius: 50%;
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: -14px 12px;
+   }
 
 .viewArea{
     background-color:rgb(234, 238, 239);
@@ -74,4 +92,8 @@ body{
     width: 20em;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+#reset{
+    padding:10px;
 }
