@@ -1,0 +1,11 @@
+name: shiny_shot_chart
+title:
+username:
+account: halko
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6806197
+bundleId: 6214903
+url: https://halko.shinyapps.io/shiny_shot_chart/
+when: 1660844636.88454
+lastSyncTime: 1660844636.88459

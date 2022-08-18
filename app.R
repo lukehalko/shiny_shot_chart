@@ -3,8 +3,6 @@ library(tidyverse)
 library(jsonlite) 
 library(easyr)
 library(lubridate)
- 
-setwd("/Users/lukeh/DATA/CompassRed/shiny/shiny_shot_chart")
      
 shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
 
