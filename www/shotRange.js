@@ -71,7 +71,7 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     for (k in keys){
       cat = keys[k]
         if(cleanStr(keys[k])!=dot_class){
-          d3.selectAll(`.${cleanStr(cat)}`).style("fill", d => d["SHOT_MADE_FLAG"]==0? "red":"green")
+          d3.selectAll(`.${cleanStr(cat)}`).style("fill", d => d["SHOT_MADE_FLAG"]==0? "#97010E":"#589d62")
         }
     }
   })
