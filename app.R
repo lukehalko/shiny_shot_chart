@@ -4,13 +4,15 @@ library(jsonlite)
 library(easyr)
 library(lubridate)
      
+# ~~~~~~~~~~ LOAD DATA ~~~~~~~~~~ #
 shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
- 
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
 
+
+# ~~~~~~~~~~ SERVER FUNCTION ~~~~~~~~~~ #
 server <- function(input, output, session) { 
-      
-  # Shot Zone (Text Description)   
+  
+  # ~~~~ Generate data for the selected player ~~~~ #
   player_data <- reactive({
                 
     d <- shot_data %>% filter(PLAYER_NAME == input$search)
@@ -26,8 +28,9 @@ server <- function(input, output, session) {
     
     d
     
-  }) 
+  })
   
+  # ~~~~ Send new data to frontend whenever an input changes
   observe({
     
     shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
