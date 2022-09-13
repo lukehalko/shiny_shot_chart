@@ -34,6 +34,6 @@ Shiny.addCustomMessageHandler('shotlocation', function(message){
         .attr("cy", d=>y(d["LOC_Y"]))
         .attr("r", 2.5)
         .attr("class", d=>`${d["SHOT_ZONE_RANGE"].replaceAll(" ", "").replace(/^/, "C").replaceAll(".","").replaceAll("-","").replaceAll("+", "")}`)
-        .style("fill", d => d["SHOT_MADE_FLAG"] == 0 ? "red" : "green")
+        .style("fill", d => d["SHOT_MADE_FLAG"] == 0 ? "#97010E" : "#589d62")
         .style("opacity", "40%")
 })

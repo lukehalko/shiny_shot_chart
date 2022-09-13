@@ -5,30 +5,30 @@ library(easyr)
 library(lubridate)
      
 shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
+ 
+players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
 
-players <- shot_data %>% select(PLAYER_NAME) %>% distinct()  
-
-server <- function(input, output, session) {
-     
-  # Shot Zone (Text Description)    
-  player_data <- reactive({  
-              
-    d <- shot_data %>% filter(PLAYER_NAME == input$search)     
-         
+server <- function(input, output, session) { 
+      
+  # Shot Zone (Text Description)   
+  player_data <- reactive({
+                
+    d <- shot_data %>% filter(PLAYER_NAME == input$search)
+            
     if(length(input$teamFilter) > 0){ 
-      d <- d %>% filter(TEAM_ID %in% input$teamFilter)  
+      d <- d %>% filter(TEAM_ID %in% input$teamFilter)   
     } 
     
     if(length(input$yearFilter) > 0){
       d <- d %>% filter(year(GAME_DATE) %in% input$yearFilter)
-
+  
     }
     
     d
     
   }) 
   
-  observe({   
+  observe({
     
     shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
     jsonData <- toJSON(shot_range, pretty=TRUE)

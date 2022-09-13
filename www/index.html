@@ -23,101 +23,114 @@
 </head>
 
 <body>
-<div class="container">
-    <section class="d-flex flex-row" id="shot-chart">
-        <div class="p-5 d-flex align-items-start sideBarWrapper">
-            <div class="sideBar">
-
-                <!-- SEARCH AREA -->
-                <div class="searchArea">
-                    <h6 class="sideBarHeader">PLAYER SEARCH</h6>
-                    <form class="d-flex flex-row" action="../app.R">
-                            <input type="search" id="search" placeholder="Search for a player"> </input>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
-
-                    <div class="d-flex flex-row" id="filterContainer">
-                        <button id="addFilter" class="btn btn-outline-dark">Add Filter <strong>+</strong></button>
-                    </div>
-
-                </div>
-                <!----------------->
-
-                 <!-- RESULTS AREA -->
-                    <div class="resultsArea">
-
-                        <ul id="filterOptions" class="list-group" hidden>
-                            <li class="list-group-item filters">Year</li> <!-- TODO: Should be season -->
-                            <li class="list-group-item filters">Team</li>
-                            <li class="list-group-item filters">Against</li>
-                            <!-- <li class="list-group-item filters">Game</li> --> <!--TODO-->
-                            <li class="list-group-item filters">Date Range</li>
-                        </ul>
-
-
-                          <!-- HTML for filtering by year -->
-                          <form class="filterForm" id="yearForm" hidden>
-                            
-                            <div id="yearFilter" class="shiny-input-checkboxgroup" role="group" aria-labelledby="yearFilter-label">
-                                <label id="yearFilter-label" class="control-label" for="yearFilter" hidden>
-                                    Year Label
-                                </label>
-                                <input type="text" id="year" hidden>
-                                <button type="submit" hidden>submit</button>
-                                <div class="shiny-options-group" id="yearOptions"></div>
+    <div class="d-flex flex-row">
+        <nav class="nav">
+            <div class="d-flex align-items-end justify-content-around">
+                <h1>Shiny Shot Chart</h1>
+                <h4 class="navLink"><a href="https://github.com/lukehalko/shiny_shot_chart" target="_blank">GitHub</a></h4>
+            </div>
+        </nav>
+    </div> 
+        <div class="background overlay">
+            <div id="backgroundImage"></div>
+                <div class="container">
+                    <section class="d-flex flex-row" id="shot-chart">
+                        <div class="p-5 d-flex align-items-start sideBarWrapper">
+                            <div class="sideBar">
+        
+                                <!-- SEARCH AREA -->
+                                <div class="searchArea">
+                                    <h6 class="sideBarHeader">PLAYER SEARCH</h6>
+                                    <form class="d-flex flex-row" action="../app.R">
+                                            <input type="search" id="search" placeholder="Search for a player"> </input>
+                                            <button type="submit" class="btn btn-light">Submit</button>
+                                    </form>
+        
+                                    <div class="d-flex flex-row" id="filterContainer">
+                                        <button id="addFilter" class="btn btn-outline-light">Add Filter <strong>+</strong></button>
+                                    </div>
+        
+                                </div>
+                                <!----------------->
+        
+                                <!-- RESULTS AREA -->
+                                    <div class="resultsArea">
+        
+                                        <ul id="filterOptions" class="list-group" hidden>
+                                            <li class="list-group-item filters">Year</li> <!-- TODO: Should be season -->
+                                            <li class="list-group-item filters">Team</li>
+                                            <li class="list-group-item filters">Against</li>
+                                            <!-- <li class="list-group-item filters">Game</li> --> <!--TODO-->
+                                            <li class="list-group-item filters">Date Range</li>
+                                        </ul>
+        
+        
+                                        <!-- HTML for filtering by year -->
+                                        <form class="filterForm" id="yearForm" hidden>
+                                            
+                                            <div id="yearFilter" class="shiny-input-checkboxgroup" role="group" aria-labelledby="yearFilter-label">
+                                                <label id="yearFilter-label" class="control-label" for="yearFilter" hidden>
+                                                    Year Label
+                                                </label>
+                                                <input type="text" id="year" hidden>
+                                                <button type="submit" hidden>submit</button>
+                                                <div class="shiny-options-group" id="yearOptions"></div>
+                                            </div>
+                                        </form>
+                                        <!-------------------------------->
+        
+        
+                                        <!-- HTML for filtering by team -->
+                                        <form class = "filterForm" id="teamForm" hidden>
+                                            
+                                            <div id="teamFilter" class="shiny-input-checkboxgroup" role="group" aria-labelledby="teamFilter-label">
+                                                <label id="teamFilter-label" class="control-label" for="teamFilter" hidden>
+                                                    Team Label
+                                                </label>
+                                                <input type="text" id="team" hidden>
+                                                <button type="submit" hidden>submit</button>
+                                                <div class="shiny-options-group" id="teamOptions"></div>
+                                            </div>
+                                        </form> 
+                                        <!-------------------------------->
+        
+                                        <!-- HTML for filtering by Date Range -->
+        
+                                            <!-- TODO -->
+        
+                                        <!-------------------------------->
+        
+                                    </div>
+                                    <!-- END RESULTS AREA -->
+        
+        
+                                        <!--  PLAYER AREA  -->
+                                        <div class="playerArea">
+                                            <div class="circle"></div>
+                                        </div>
+                                        
                             </div>
-                          </form>
-                          <!-------------------------------->
-
-
-                          <!-- HTML for filtering by team -->
-                        <form class = "filterForm" id="teamForm" hidden>
-                            
-                            <div id="teamFilter" class="shiny-input-checkboxgroup" role="group" aria-labelledby="teamFilter-label">
-                                <label id="teamFilter-label" class="control-label" for="teamFilter" hidden>
-                                    Team Label
-                                </label>
-                                <input type="text" id="team" hidden>
-                                <button type="submit" hidden>submit</button>
-                                <div class="shiny-options-group" id="teamOptions"></div>
-                            </div>
-                        </form> 
-                        <!-------------------------------->
-
-                         <!-- HTML for filtering by Date Range -->
-
-                            <!-- TODO -->
-
-                        <!-------------------------------->
-
-                    </div>
-                     <!-- END RESULTS AREA -->
-
-
-                          <!--  PLAYER AREA  -->
-                           <div class="playerArea">
-                            <div class="circle"></div>
-                           </div>
                         
-            </div>
-           
-        </div>
-        <div class="p-5 d-flex align-items-center viewWrapper"> 
-            <div class="container viewArea">
-
-                <div class="d-flex flex-row justify-content-center">
-                    <div class="p-1 d-flex align-items-start shotChart"></div>
-                    <div class="p-1 d-flex align-items-end shotDistance"></div>
+                        </div>
+                        <div class="p-5 d-flex align-items-center viewWrapper"> 
+                            <div class="container viewArea">
+        
+                                <div class="d-flex flex-row justify-content-center">
+                                    <div class="p-1 d-flex align-items-start shotChart"></div>
+                                    <div class="p-1 d-flex align-items-end shotDistance"></div>
+                                </div>
+        
+                                <div class="d-flex flex-row justify-content-start">
+                                    <!-- row 2: pie charts -->
+                                        <div class="shotZoneRange"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>            
                 </div>
-
-                <div class="d-flex flex-row justify-content-start">
-                    <!-- row 2: pie charts -->
-                        <div class="shotZoneRange"></div>
-                </div>
-            </div>
+            <!-- </div> -->
         </div>
-    </section>            
-</div>
+    
 
     <script src="shotRange.js"></script>
     <script src="shotType.js"></script>
