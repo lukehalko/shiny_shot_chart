@@ -30,27 +30,26 @@ server <- function(input, output, session) {
     
   })
   
-  # ~~~~ Send new data to frontend whenever an input changes
+  # ~~~~ Send new data to frontend whenever an input changes ~~~~ #
   observe({
     
+    # Shot Range Data (For Pie Chart)
     shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
     jsonData <- toJSON(shot_range, pretty=TRUE)
     session$sendCustomMessage(type="shot_zone_range", jsonData) 
     
-    # Shot Location (For Shot Chart) 
+    # Shot Location Data (For Shot Chart) 
     shot_loc <- player_data() %>% select(SHOT_ZONE_RANGE, LOC_X, LOC_Y, SHOT_MADE_FLAG) 
     jsonData <- toJSON(shot_loc, pretty=TRUE)
     session$sendCustomMessage(type="shotlocation", jsonData)  
     
-    # Shot Distance (For Violin Plot)  
+    # Shot Distance Data (For Violin Plot)  
     shot_dist <- player_data() %>% 
       filter(SHOT_DISTANCE < 40) %>% 
       select(SHOT_DISTANCE)
     
-    jsonData <- toJSON(shot_dist, pretty=TRUE)
-    session$sendCustomMessage(type="shot_distance", jsonData) 
      
-    # Filter data for a given player: teams, seasons, teamsAgainst, game dates (?) and date range (?)
+    # ~~~~  Filter data for a given player: teams, seasons, teamsAgainst, game dates (?) and date range (?) ~~~~ #
     teams <- player_data() %>%
       select(TEAM_ID) %>% 
       distinct() 
@@ -74,7 +73,12 @@ server <- function(input, output, session) {
        distinct()
      
     
-
+     
+    # ~~~~ Send data to session ~~~~ #
+     
+    jsonData <- toJSON(shot_dist, pretty=TRUE)
+    session$sendCustomMessage(type="shot_distance", jsonData)
+     
     jsonData <- toJSON(teams, pretty=TRUE) 
     session$sendCustomMessage(type="team_filter", jsonData)
     
@@ -87,7 +91,4 @@ server <- function(input, output, session) {
 }
 
 # No UI function necessary. I'll create the UI manual through an HTML file that I control.
-
-
-
 shinyApp(ui = htmlTemplate("www/index.html"), server = server)
