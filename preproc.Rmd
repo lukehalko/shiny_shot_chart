@@ -77,4 +77,19 @@ new_data <- new_data %>% mutate(GAME_DATE = paste(substr(GAME_DATE, 5, 6), subst
 
 new_data %>% write_csv("./data/active_players_fga.csv")
 ```
+```{r}
+active <- read_csv("./data/active_players_fga.csv")
+
+active <- active %>% mutate(SHOT_ZONE_RANGE = case_when(
+  SHOT_ZONE_RANGE == "Less Than 8ft." ~ "<8 ft.",
+  SHOT_ZONE_RANGE == "Backcourt" ~ "47+ ft.",
+  TRUE ~ SHOT_ZONE_RANGE
+) )
+
+active %>% filter(SHOT_ZONE_RANGE == "<8 ft.")
+```
+
+```{r}
+# active %>% write_csv("./data/active_players_fga.csv") # uncomment to save new csv 
+```
 

@@ -6,6 +6,21 @@
     padding-top: 5px;
   }
 
+@font-face {
+    font-family: bungeeOutline;
+    src: url(BungeeOutline-Regular.ttf);
+}
+
+@font-face {
+    font-family:bungee;
+    src: url(Bungee-Regular.ttf)
+}
+
+@font-face {
+    font-family: labelFont;
+    src: url(ShareTechMono-Regular.ttf)
+}
+
 body{
     padding-left:15px;
 }
@@ -40,7 +55,7 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: -14px 12px #979797
+    box-shadow: -11px 11px 7px #1b1d1d
    }
 
 .viewArea{
@@ -165,4 +180,14 @@ a{
 
 a:hover{
     color:#16354D
+}
+
+.shootingSplits{
+    font-family: bungeeOutline;
+    font-size: 30px;
+}
+
+.splitHeader {
+    font-family: bungeeHairline;
+    font-size: 20px;
 }

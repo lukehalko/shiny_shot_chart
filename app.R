@@ -4,37 +4,37 @@ library(jsonlite)
 library(easyr)
 library(lubridate)
      
-# ~~~~~~~~~~ LOAD DATA ~~~~~~~~~~ #
+# ~~~~~~~~~~ LOAD DATA ~~~~~~~~~~ #    
 shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
-players <- shot_data %>% select(PLAYER_NAME) %>% distinct() 
-
-
+players <- shot_data %>% select(PLAYER_NAME) %>% distinct()  
+  
+  
 # ~~~~~~~~~~ SERVER FUNCTION ~~~~~~~~~~ #
 server <- function(input, output, session) { 
-  
-  # ~~~~ Generate data for the selected player ~~~~ #
+    
+  # ~~~~ Generate data for the selected player ~~~~ # 
   player_data <- reactive({
                 
-    d <- shot_data %>% filter(PLAYER_NAME == input$search)
+    d <- shot_data %>% filter(PLAYER_NAME == input$search)  
             
     if(length(input$teamFilter) > 0){ 
-      d <- d %>% filter(TEAM_ID %in% input$teamFilter)   
-    } 
+      d <- d %>% filter(TEAM_ID %in% input$teamFilter)    
+    }  
     
     if(length(input$yearFilter) > 0){
       d <- d %>% filter(year(GAME_DATE) %in% input$yearFilter)
-  
+   
     }
     
     d
     
   })
   
-  # ~~~~ Send new data to frontend whenever an input changes ~~~~ #
+  # ~~~~ Send new data to frontend whenever an input changes ~~~~ # 
   observe({
     
     # Shot Range Data (For Pie Chart)
-    shot_range <- player_data() %>% count(SHOT_ZONE_RANGE) 
+    shot_range <- player_data() %>% count(SHOT_ZONE_RANGE)  
     jsonData <- toJSON(shot_range, pretty=TRUE)
     session$sendCustomMessage(type="shot_zone_range", jsonData) 
     
@@ -46,27 +46,27 @@ server <- function(input, output, session) {
     # Shot Distance Data (For Violin Plot)  
     shot_dist <- player_data() %>% 
       filter(SHOT_DISTANCE < 40) %>% 
-      select(SHOT_DISTANCE)
+      select(SHOT_DISTANCE) 
     
      
     # ~~~~  Filter data for a given player: teams, seasons, teamsAgainst, game dates (?) and date range (?) ~~~~ #
     teams <- player_data() %>%
       select(TEAM_ID) %>% 
       distinct() 
-
-     seasons <- player_data() %>% 
+ 
+     seasons <- player_data() %>%  
        select(GAME_DATE)%>%
-       distinct() %>%
+       distinct() %>%    
        mutate(year = year(GAME_DATE)) %>% 
-       select(year) %>%
+       select(year) %>% 
        distinct()
+       
+       
       
-      
-     
     # teams_against <- player_data() %>%   
     #   select(AGAINST) %>%
     #   distinct()
-     
+      
      
      player_id <- player_data() %>%
        select(PLAYER_ID) %>%
@@ -87,7 +87,7 @@ server <- function(input, output, session) {
     
     jsonData <- toJSON(player_id, pretty=TRUE)
     session$sendCustomMessage("player_id", jsonData)
-  }) 
+  })  
 }
 
 # No UI function necessary. I'll create the UI manual through an HTML file that I control.

@@ -1,38 +1,35 @@
 console.log("script.js is active")
 
-const cleanStr = (s) => {
-  return s.replaceAll(" ", "").replace(/^/, "C").replaceAll(".","").replaceAll("-","").replaceAll("+", "")
+height=250;
+svg_width = 250;   
+let clicked = false;
+
+const cleanStr = (s) => { 
+  // A helper function for making strings conform to CSS classname standards
+  return s.replaceAll(" ", "").replace(/^/, "C").replaceAll(".","").replaceAll("-","").replaceAll("+", "").replaceAll("<", "")
 }
 
-    height=250;
-    width=100;
-    o_width = 500;   // For some reason it breaks when I try to name this variable width? 
-    let click;
-    let clicked = false;
-
-/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ PIE CHART #1 ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
+/* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ PIE CHART: Shot Range ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
 Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
-
-  // Recieved shot_zone_range data from RShiny
-
     let newData = {}
     let data = message;
+
     data = data.forEach(o => {
-      newData[o["SHOT_ZONE_RANGE"]] = o["n"]
+      newData[o["SHOT_ZONE_RANGE"]] = o["n"] // Unpack the shiny object into something more workable
     })
 
     d3.select("#pieChart").remove()
-    const radius = height/2
+    const radius = 150
         
-    const svg = d3.select(".shotZoneRange")
+    const svg = d3.select(".shotZoneRange") // generate an svg element to hold the chart
           .append("svg")
           .attr("id", "pieChart")
           .attr("height", 250)
-          .attr("width", o_width)
-          .attr("viewBox",`250 -25 500 500`)
+          .attr("width", svg_width)
+          .attr("viewBox",`250 -25 25 500`)
           .append("g")
-          .attr("transform", `translate(${width/2}, ${height/2})`)
+          .attr("transform", `translate(${230}, ${230}) scale(1.4)`)
   
 
   const keys = Object.entries(newData).map(d => d[0])
@@ -53,15 +50,45 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
   .style("opacity", 0.7)
 
   .on("mouseover", (e) => {
+
+    // on mouseover, do two things: highlight dots in that shot range, and render new text inside the pie
+
+    // First, remove any text if there is any
+    d3.select(".category_text").remove()
+    d3.select(".percentage_text").remove()
+
     dot_class = cleanStr(e.target.__data__.data[0])
     
-    // hide all dots not in the category that you clicked
+    // highlight dots: 
+
     for (k in keys){
       cat = keys[k]
         if(cleanStr(keys[k])!=dot_class){
-          d3.selectAll(`.${cleanStr(cat)}`).style("fill", "gray")
+          d3.selectAll(`.${cleanStr(cat)}`).style("fill", "gray") // All dots not in category turn gray
         }
     }
+
+    // render new text:
+
+    cat = e.target.__data__.data[0]
+
+    n_shots = e.target.__data__.data[0] 
+
+    console.log(cat)
+
+    svg.append("text").text(cat)
+    .attr("class", "category_text")
+    .attr("x", "-30").attr("y", "-55")
+    .style("font","bold 18px monospace")
+    .style("fill", color(n_shots))
+
+    svg.append("text").text("69%")
+    .attr("class", "percentage_text")
+    .attr("x", "-74").attr("y", "30")
+    .style("font", "65px bungee")
+    .style("fill", color(n_shots))
+
+
   })
 
   .on("mouseout", (e) => {
@@ -78,10 +105,10 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
   
   .on("click",(e)=>{ 
     clicked = !clicked
-   // When you click a piece of the donut, the shot chart should only display shots in *that* category
+   // When you click a piece of the donut, the shot chart should only display shots in ~that~ category
    // NOTE : this feature isn't supported in RStudio viewer likely due to the "hidden" stuff
 
-    dot_class = cleanStr(e.target.__data__.data[0])
+    dot_class = cleanStr(e.target.__data__.data[0]) 
     
     // hide all dots not in the category that you clicked
     for (k in keys){
@@ -97,40 +124,32 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     }
   })
 
-    svg.selectAll("dots")
-    .data(keys)
-    .enter()
-    .append("circle")
-    .attr("cx", 300)
-    .attr("cy", (d,i)=> 0 + i*40)
-    .attr("r", 17)
-    .attr("class","label")
-    .style("fill", d => color(d))
 
-    svg.selectAll("labels")
-    .data(keys)
-    .enter()
-    .append("text")
-    .attr("x", 350)
-    .attr("y", (d,i) => 1 + i*40)
-    .style("fill", d => color(d))
-    .style("font-size", "30px")
-    .attr("class", "label")
-    .text(d => d)
-    .attr("text-anchor", "left")
-    .style("alignment-baseline", "middle")
+    /* ~ Code for generating static labels for pie chart ~ */
 
-    // // highlight selected area on shot chart
-    // cat = e.target.__data__.data[0]
-    // dot_class = cleanStr(cat)    
-    // d3.selectAll(`.${dot_class}`).attr("stroke", color(cat))
-  
-  .on("mouseout", (e) => {
-    // // Delete labels on mouseout
-    // d3.selectAll(".label").remove()
+    // svg.selectAll("dots") 
+    // .data(keys)
+    // .enter()
+    // .append("circle")
+    // .attr("cx", 300)
+    // .attr("cy", (d,i)=> 0 + i*40)
+    // .attr("r", 17)
+    // .attr("class","label")
+    // .style("fill", d => color(d))
 
-    // // Remove highlight on mouseout
-    // dot_class = cleanStr(e.target.__data__.data[0])
-    // d3.selectAll(`.${dot_class}`).attr("stroke","transparent")
-  })
+    // svg.selectAll("labels")
+    // .data(keys)
+    // .enter()
+    // .append("text")
+    // .attr("x", 350)
+    // .attr("y", (d,i) => 1 + i*40)
+    // .style("fill", d => color(d))
+    // .style("font-size", "30px")
+    // .attr("class", "label")
+    // .text(d => d)
+    // .attr("text-anchor", "left")
+    // .style("alignment-baseline", "middle")
+
+    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    
 })
