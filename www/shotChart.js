@@ -20,7 +20,7 @@ Shiny.addCustomMessageHandler('shotlocation', function(message){
       .attr("transform", "rotate(180) translate(-107,54) scale(1.5)")
       .attr("transform-origin", "50% 50%")
 
-    const chart_area = svg.append("g").attr("transform", `translate(3,-40)`)
+    const chart_area = svg.append("g").attr("transform", "translate(10,-30) scale(0.97)")
       
 
     const x = d3.scaleLinear()

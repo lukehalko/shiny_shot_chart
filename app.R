@@ -29,7 +29,7 @@ server <- function(input, output, session) {
     if(length(input$yearFilter) > 0){  
       d <- d %>% filter(year(GAME_DATE) %in% input$yearFilter)
    
-    }
+    } 
     
     d
      
