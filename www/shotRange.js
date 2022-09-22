@@ -54,7 +54,8 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
   .attr('d', d3.arc()
     .innerRadius(radius)   // This is the size of the donut hole
     .outerRadius(100)
-  ).attr("fill", d => color(d.data[0]))
+  ).attr("fill", d => color(d.data[1]))
+  .attr("test", d=> d.data[1])
   .attr("stroke", "rgb(234, 238, 239)")
   .style("stroke-width", "2px")
   .style("opacity", 0.7)

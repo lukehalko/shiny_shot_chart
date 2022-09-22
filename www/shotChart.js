@@ -1,10 +1,12 @@
-let width = 450
+let width = 500
 let height = 450
 
 let shot_data
 
 Shiny.addCustomMessageHandler('shotlocation', function(message){
+
     let data = shot_data = message;
+
     d3.select("#shotLocation").remove()
 
     const svg = d3.select(".shotChart")
@@ -12,13 +14,15 @@ Shiny.addCustomMessageHandler('shotlocation', function(message){
       .attr("height", height)
       .attr("width", width)
       .attr("id", "shotLocation")
-      .append("g")
-      .attr("transform", `translate(0,-40)`)
 
     svg.append("image")
       .attr("href", "./img/nba-halfcourt-diagram-removebg-preview.png")
-      .attr("transform", "rotate(180) translate(-139,15) scale(1.45)")
+      .attr("transform", "rotate(180) translate(-107,54) scale(1.5)")
       .attr("transform-origin", "50% 50%")
+
+    const chart_area = svg.append("g").attr("transform", `translate(3,-40)`)
+      
+
     const x = d3.scaleLinear()
       .domain([-250, 250])
       .range([0,width])
@@ -26,7 +30,7 @@ Shiny.addCustomMessageHandler('shotlocation', function(message){
       .domain([0,450])
       .range([height,0])
 
-    svg.selectAll("shotDots")
+    chart_area.selectAll("shotDots")
         .data(data)
         .enter()
         .append("circle")

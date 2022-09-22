@@ -8,37 +8,41 @@ library(lubridate)
 shot_data <- read_csv("./data/active_players_fga.csv") %>% mutate(GAME_DATE = mdy(GAME_DATE))
 per_game <- read_csv("./data/player_per_game_2022.csv")
 players <- shot_data %>% select(PLAYER_NAME) %>% distinct()  
-  
-  
+
+
+str_clean <- function(str){
+  str %>% str_to_lower() %>% str_replace("'", "" %>% str_replace(" ", ""))
+} 
+
 # ~~~~~~~~~~ SERVER FUNCTION ~~~~~~~~~~ #
 server <- function(input, output, session) { 
     
   # ~~~~ Generate data for the selected player ~~~~ # 
   player_data <- reactive({
                 
-    d <- shot_data %>% filter(PLAYER_NAME == input$search)  
+    d <- shot_data %>% filter(str_clean(PLAYER_NAME) == str_clean(input$search)) 
             
-    if(length(input$teamFilter) > 0){
+    if(length(input$teamFilter) > 0){ 
       d <- d %>% filter(TEAM_ID %in% input$teamFilter)    
     }  
     
-    if(length(input$yearFilter) > 0){
+    if(length(input$yearFilter) > 0){  
       d <- d %>% filter(year(GAME_DATE) %in% input$yearFilter)
    
     }
     
     d
-    
+     
   })
   
   shooting_splits <- reactive({
     
     d <- per_game %>% filter(player == input$search) %>% select(fg2_pct, fg3_pct, fg_pct)
     
-    d
+    d 
     
   })
-  
+   
   
   
   # ~~~~ Send new data to frontend whenever an input changes ~~~~ # 
@@ -68,7 +72,7 @@ server <- function(input, output, session) {
      seasons <- player_data() %>%  
        select(GAME_DATE)%>%
        distinct() %>%    
-       mutate(year = year(GAME_DATE)) %>% 
+       mutate(year = year(GAME_DATE)) %>%
        select(year) %>% 
        distinct()
        
@@ -94,8 +98,8 @@ server <- function(input, output, session) {
     session$sendCustomMessage(type="team_filter", jsonData)
      
     jsonData <- toJSON(seasons, pretty=TRUE)  
-    session$sendCustomMessage("season_filter", jsonData)
-    
+    session$sendCustomMessage("season_filter", jsonData) 
+      
     jsonData <- toJSON(player_id, pretty=TRUE)  
     session$sendCustomMessage("player_id", jsonData)
   })
