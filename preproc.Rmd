@@ -90,6 +90,15 @@ active %>% filter(SHOT_ZONE_RANGE == "<8 ft.")
 ```
 
 ```{r}
+
+per_game <- read_csv("./data/player_per_game_2022.csv")
+
+
+per_game
+```
+
+
+```{r}
 # active %>% write_csv("./data/active_players_fga.csv") # uncomment to save new csv 
 ```
 

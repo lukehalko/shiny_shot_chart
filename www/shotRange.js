@@ -9,19 +9,29 @@ const cleanStr = (s) => {
   return s.replaceAll(" ", "").replace(/^/, "C").replaceAll(".","").replaceAll("-","").replaceAll("+", "").replaceAll("<", "")
 }
 
+const toPct = (dec) => {
+  // helper function for converting a decimal num (e.g. 0.65789) to a string showing a percentage (e.g. "65%")
+  const int = parseInt(dec * 100)
+
+  return (int >= 10) ? int.toString() + "%" : "0" + int.toString() + "%"
+}
+
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ PIE CHART: Shot Range ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
 Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     let newData = {}
     let data = message;
-
+    
     data = data.forEach(o => {
       newData[o["SHOT_ZONE_RANGE"]] = o["n"] // Unpack the shiny object into something more workable
     })
 
+    const n_shots = Object.entries(newData).reduce( (prev, curr) => { return curr[1] + prev[0] }) 
+    console.log("n_shots = ", n_shots)
     d3.select("#pieChart").remove()
     const radius = 150
-        
+    
+
     const svg = d3.select(".shotZoneRange") // generate an svg element to hold the chart
           .append("svg")
           .attr("id", "pieChart")
@@ -36,7 +46,7 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
   const color = d3.scaleOrdinal().domain(keys).range(["#440381","#E03800", "#473144", "0B032D", "#7CDF91"])
   const pie = d3.pie().value(d => d[1])
   const pie_data = pie(Object.entries(newData))
-
+  console.log("newData: ", newData)
 
  svg.selectAll('paths')
   .data(pie_data)
@@ -72,7 +82,7 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
 
     cat = e.target.__data__.data[0]
 
-    n_shots = e.target.__data__.data[0] 
+    cat_n_shots = e.target.__data__.data[1] 
 
     console.log(cat)
 
@@ -80,13 +90,17 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     .attr("class", "category_text")
     .attr("x", "-30").attr("y", "-55")
     .style("font","bold 18px monospace")
-    .style("fill", color(n_shots))
+    .style("fill", color(cat_n_shots))
 
-    svg.append("text").text("69%")
+    console.log("cat_n_shots = ", cat_n_shots)
+    console.log("n_shots = ", n_shots)
+    console.log(cat_n_shots / n_shots)
+
+    svg.append("text").text(toPct(cat_n_shots/n_shots))
     .attr("class", "percentage_text")
     .attr("x", "-74").attr("y", "30")
     .style("font", "65px bungee")
-    .style("fill", color(n_shots))
+    .style("fill", color(cat_n_shots))
 
 
   })
