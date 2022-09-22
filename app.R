@@ -81,7 +81,7 @@ server <- function(input, output, session) {
      
     jsonData <- toJSON(teams, pretty=TRUE) 
     session$sendCustomMessage(type="team_filter", jsonData)
-    
+     
     jsonData <- toJSON(seasons, pretty=TRUE) 
     session$sendCustomMessage("season_filter", jsonData)
     
