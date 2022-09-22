@@ -12,17 +12,17 @@ players <- shot_data %>% select(PLAYER_NAME) %>% distinct()
 
 str_clean <- function(str){
   str %>% str_to_lower() %>% str_replace("'", "" %>% str_replace(" ", ""))
-} 
+}   
 
 # ~~~~~~~~~~ SERVER FUNCTION ~~~~~~~~~~ #
 server <- function(input, output, session) { 
     
   # ~~~~ Generate data for the selected player ~~~~ # 
-  player_data <- reactive({
-                
+  player_data <- reactive({   
+                    
     d <- shot_data %>% filter(str_clean(PLAYER_NAME) == str_clean(input$search)) 
             
-    if(length(input$teamFilter) > 0){ 
+    if(length(input$teamFilter) > 0){  
       d <- d %>% filter(TEAM_ID %in% input$teamFilter)    
     }  
     
@@ -36,7 +36,7 @@ server <- function(input, output, session) {
   })
   
   shooting_splits <- reactive({
-    
+     
     d <- per_game %>% filter(player == input$search) %>% select(fg2_pct, fg3_pct, fg_pct)
     
     d 

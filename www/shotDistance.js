@@ -1,9 +1,7 @@
-let test
 Shiny.addCustomMessageHandler("shot_distance", (message) => {
     let data=[]
     message.forEach(d => data.push(d.SHOT_DISTANCE))
     d3.select("#violin").remove()
-    test = data
     // const name = data[0].PLAYER_NAME
     
     const svg = d3.select(".shotDistance")

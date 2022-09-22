@@ -3,7 +3,8 @@ console.log("script.js is active")
 height=250;
 svg_width = 250;   
 let clicked = false;
-
+let test;
+let x;
 const cleanStr = (s) => { 
   // A helper function for making strings conform to CSS classname standards
   return s.replaceAll(" ", "").replace(/^/, "C").replaceAll(".","").replaceAll("-","").replaceAll("+", "").replaceAll("<", "")
@@ -19,18 +20,22 @@ const toPct = (dec) => {
 /* ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ PIE CHART: Shot Range ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ */
 
 Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
+    d3.select("#pieChart").remove()
+
     let newData = {}
     let data = message;
+    test = message
+
+    const radius = 150; // inner donut hole radius
     
-    data = data.forEach(o => {
+    data.forEach(o => {
       newData[o["SHOT_ZONE_RANGE"]] = o["n"] // Unpack the shiny object into something more workable
     })
-
+    x = newData
     const n_shots = Object.entries(newData).reduce( (prev, curr) => { return curr[1] + prev[0] }) 
-    console.log("n_shots = ", n_shots)
-    d3.select("#pieChart").remove()
-    const radius = 150
-    
+
+    let cat = "<8 ft." // TODO: compute the category w/ largest n_shots
+    let cat_n_shots = newData[cat]
 
     const svg = d3.select(".shotZoneRange") // generate an svg element to hold the chart
           .append("svg")
@@ -52,7 +57,7 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
   .data(pie_data)
   .join('path')
   .attr('d', d3.arc()
-    .innerRadius(radius)   // This is the size of the donut hole
+    .innerRadius(radius)
     .outerRadius(100)
   ).attr("fill", d => color(d.data[1]))
   .attr("test", d=> d.data[1])
@@ -85,25 +90,17 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
 
     cat_n_shots = e.target.__data__.data[1] 
 
-    console.log(cat)
-
     svg.append("text").text(cat)
     .attr("class", "category_text")
     .attr("x", "-30").attr("y", "-55")
     .style("font","bold 18px monospace")
     .style("fill", color(cat_n_shots))
 
-    console.log("cat_n_shots = ", cat_n_shots)
-    console.log("n_shots = ", n_shots)
-    console.log(cat_n_shots / n_shots)
-
     svg.append("text").text(toPct(cat_n_shots/n_shots))
     .attr("class", "percentage_text")
     .attr("x", "-74").attr("y", "30")
     .style("font", "65px bungee")
     .style("fill", color(cat_n_shots))
-
-
   })
 
   .on("mouseout", (e) => {
@@ -140,6 +137,19 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
   })
 
 
+  svg.append("text").text(cat)
+  .attr("class", "category_text")
+  .attr("x", "-30").attr("y", "-55")
+  .style("font","bold 18px monospace")
+  .style("fill", color(cat_n_shots))
+
+  svg.append("text").text(toPct(cat_n_shots/n_shots))
+  .attr("class", "percentage_text")
+  .attr("x", "-74").attr("y", "30")
+  .style("font", "65px bungee")
+  .style("fill", color(cat_n_shots))
+
+
     /* ~ Code for generating static labels for pie chart ~ */
 
     // svg.selectAll("dots") 
@@ -165,6 +175,6 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
     // .attr("text-anchor", "left")
     // .style("alignment-baseline", "middle")
 
-    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
     
 })
