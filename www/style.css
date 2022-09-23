@@ -165,12 +165,13 @@ body{
 }
 
 h1{
-    font-size: 70px; 
+    font-size: 65px; 
     padding-left: 60px;
 }
 
 .navLink{
-    padding-left: 60px;
+    font-size: 35px;
+    padding-left: 30px;
 }
 
 a{
