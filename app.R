@@ -33,13 +33,13 @@ server <- function(input, output, session) {
     
     d
      
-  })
+  }) 
   
-  shooting_splits <- reactive({
+  shooting_splits <- reactive({ 
      
     d <- per_game %>% filter(player == input$search) %>% select(fg2_pct, fg3_pct, fg_pct)
     
-    d 
+    d  
     
   })
    

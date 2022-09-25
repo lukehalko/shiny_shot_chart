@@ -48,7 +48,7 @@ Shiny.addCustomMessageHandler('shot_zone_range', function (message) {
   
 
   const keys = Object.entries(newData).map(d => d[0])
-  const color = d3.scaleOrdinal().domain(keys).range(["#440381","#E03800", "#473144", "0B032D", "#7CDF91"])
+  const color = d3.scaleOrdinal().domain(keys).range(["#DE9E36","#E03800","#440381", "#0B032D", "#7CDF91"])
   const pie = d3.pie().value(d => d[1])
   const pie_data = pie(Object.entries(newData))
   console.log("newData: ", newData)
